@@ -1,0 +1,36 @@
+// main: ../main.scss
+// -------------------------------------------------
+// Description:   This file contains all mixins used
+//                on this site to optimise code.
+// -------------------------------------------------
+
+// Basic 3 values used for ::before and ::after. //
+@mixin pseudo($display: block, $pos: absolute, $content: ''){
+    content: $content;
+    display: $display;
+    position: $pos;
+}
+
+// Basic 45 values used for absolute positioning. //
+@mixin absolute ($top, $right, $bottom, $left) {
+   position: absolute;
+   top: $top;
+   right: $right;
+   bottom: $bottom;
+   left: $left;
+}
+
+$breakpoints: (
+  'xs':  480px,
+  'sm':  768px,
+  'md': 992px,
+  'lg':  1260px
+) !default;
+
+/// Mixin to manage responsive breakpoints
+@mixin mq($breakpoint) {
+  // Prints a media query based on the value
+  @media (max-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}

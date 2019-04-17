@@ -1,0 +1,79 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url("../img/space-background-9.jpg");
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: 'Montserrat', sans-serif;
+}
+
+html body {
+  margin: 0;
+}
+
+html body main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100vh;
+}
+
+.orbitSimulationUserInput {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px white solid;
+  width: 450px;
+  min-width: 450px;
+  height: 80%;
+  margin-right: 150px;
+  margin-left: auto;
+  border-radius: 25px;
+  padding: 20px 15px;
+}
+
+.orbitSimulationUserInput h1 {
+  color: white;
+  text-align: center;
+  font-size: 24px;
+  font-family: 'Press Start 2P', cursive;
+  text-transform: capitalize;
+  line-height: 32px;
+}
+
+.orbitSimulationUserInput h2 {
+  color: white;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.orbitSimulationContainer {
+  width: 100%;
+  height: 80%;
+  position: relative;
+  border-radius: 25px;
+}
+
+.earth {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 50%;
+  color: white;
+}
+
+.sun {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 50%;
+  margin-left: -30px;
+  margin-top: -30px;
+  background-color: orange;
+  border-radius: 50%;
+  color: white;
+}
