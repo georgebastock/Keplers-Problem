@@ -4,273 +4,57 @@
 
 // Scripts
 
-// Calculates the position of a orbiting planet
-var physics = (function() {
+// Function to create a simple percentage based slide bar
+function slideBar(id, onDrag) {
 
-  // Values that wont be changed relative to the earth and sun
-  var constants = {
-    // The gravitational constant [G], is a physical constant involved in the calculation of gravitational effects
-    gravitationalConstant: (6.67408 * Math.pow(10, -11)),
-    // The distance between the earth and sun
-    earthSunDistanceMeters: (1.496 * Math.pow(10, 11)),
-    // The rate of change in the angle of the earth
-    earthAngularVelocityMetersPerSecond: (1.990986 *  Math.pow(10, -7)),
-    // The mass of the sun
-    massOfTheSunKg: (1.98855 * Math.pow(10, 30))
-  };
+  // Gets slider element
+  var slide = document.getElementById(id);
+  // Gets dragger element
+  var dragger = slide.children[0];
+  // width of dragger
+  var draggerWidth = 10;
+  // Misc
+  var down = false;
+  var rangeWidth;
+  var rangeLeft;
+  var sliderValue;
 
-  // The length of one AU (Earth-Sun distance) in pixels.
-  var pixelsInOneEarthSunDistancePerPixel = 150;
-  // A factor that scales the distance between the earth and sun
-  var scaleFactor = (constants.earthSunDistanceMeters / pixelsInOneEarthSunDistancePerPixel);
-  // The number of orbit calculations done per frame. Higher numbers give more precise calculations but slow the simulation.
-  var numberOfCalculationsPerFrame = 1000;
-  // The length of the time increment, in seconds.
-  var deltaT = (3600 * 24 / numberOfCalculationsPerFrame);
+  // Styles initial dragger
+  dragger.style.width = draggerWidth + 'px';
+  dragger.style.left = "114" + 'px';
+  dragger.style.marginLeft = "5" + 'px';
+  onDrag(50);
 
-  // Initial condition of the model
-  var initialConditions = {
-    distance: {
-      value: constants.earthSunDistanceMeters,
-      speed: 0.00
-    },
-    angle: {
-      value: Math.PI / 6,
-      speed: constants.earthAngularVelocityMetersPerSecond
-    }
-  };
+  // Checks for user input on the slider
+  slide.addEventListener("mousedown", function(e) {
+    rangeWidth = this.offsetWidth;
+    rangeLeft = this.offsetLeft;
+    down = true;
+    updateDragger(e);
+    return false;
+  });
 
-  // Current state of the model (Constantly updates)
-  var state = {
-    distance: {
-      value: 0,
-      speed: 0
-    },
-    angle: {
-      value: 0,
-      speed: 0
-    },
-    massOfTheSunKg: constants.massOfTheSunKg,
-    paused: false
-  };
+  // Checks for user input on the dragger
+  document.addEventListener("mousemove", function(e) {
+    updateDragger(e);
+  });
+  document.addEventListener("mouseup", function() {
+    down = false;
+  });
 
-  // Function to calculates the acceleration of the distance given the current state
-  // Equation: [acceleration of distance] = [distance][angular velocity]^2 - G * M / [distance]^2
-  function calculateDistanceAcceleration(state) {
-    return (state.distance.value * Math.pow(state.angle.speed, 2) -
-      (constants.gravitationalConstant * state.massOfTheSunKg) / Math.pow(state.distance.value, 2));
+  // Function to update where the dragger is on the slider
+  function updateDragger(e) {
+      if (down && e.pageX >= rangeLeft && e.pageX <= (rangeLeft + rangeWidth)) {
+        dragger.style.left = e.pageX - rangeLeft - draggerWidth + 'px';
+        if (typeof onDrag == "function") {
+          onDrag(Math.round(((e.pageX - rangeLeft) / rangeWidth) * 100));
+        }
+      }
   }
+}
 
-  // Function to calculates the acceleration of the angle given the current state
-  // Equation: [acceleration of angle] = - 2[speed][angular velocity] / [distance]
-  function calculateAngleAcceleration(state) {
-    return (-2.0 * state.distance.speed * state.angle.speed / state.distance.value);
-  }
-
-  // Function to calculate the derivative value from Eulers method
-  function newValue(currentValue, deltaT, derivative) {
-    return (currentValue + deltaT * derivative);
-  }
-
-  // Function to reset all states to there initial values
-  function resetStateToInitialConditions() {
-    // Distance
-    state.distance.value = initialConditions.distance.value;
-    state.distance.speed = initialConditions.distance.speed;
-    // Angle
-    state.angle.value = initialConditions.angle.value;
-    state.angle.speed = initialConditions.angle.speed;
-  }
-
-  // A function to calculate distance used on the canvas
-  function scaledDistance() {
-    return (state.distance.value / scaleFactor);
-  }
-
-  // Main function that calls on every animation frame. It calculates and updates the current positions of the bodies
-  function updatePosition() {
-    // Dont update if paused
-    if (physics.state.paused) {
-      return;
-    }
-    // Calculates the position of each bodyso many times a frame
-    for (var i = 0; i < numberOfCalculationsPerFrame; i++) {
-      calculateNewPosition();
-    }
-  }
-
-  // Calculates position of the Earth
-  function calculateNewPosition() {
-    // Calculate new distance
-    var distanceAcceleration = calculateDistanceAcceleration(state);
-    state.distance.speed = newValue(state.distance.speed, deltaT, distanceAcceleration);
-    state.distance.value = newValue(state.distance.value, deltaT, state.distance.speed);
-    // Calculate new angle
-    var angleAcceleration = calculateAngleAcceleration(state);
-    state.angle.speed = newValue(state.angle.speed, deltaT, angleAcceleration);
-    state.angle.value = newValue(state.angle.value, deltaT, state.angle.speed);
-    // If the angle breaks the laws of angles (360+)
-    if (state.angle.value > 2 * Math.PI) {
-      state.angle.value = (state.angle.value % (2 * Math.PI));
-    }
-  }
-
-  return {
-    scaledDistance: scaledDistance,
-    resetStateToInitialConditions: resetStateToInitialConditions,
-    updatePosition: updatePosition,
-    initialConditions: initialConditions,
-    state: state
-  };
-})();
-
-// Draw the scene to the canvas
-var graphics = (function() {
-  // Canvas DOM element.
-  var canvas = null
-  // Canvas context for drawing.
-  var context = null
-  // Height of the canvas
-  var canvasHeight = 749;
-  // Size of orbiting planet
-  var earthSize = 25;
-  // Size of central body
-  var sunsSize = 60;
-  // Color for the orbital path
-  var colors = { orbitalPath: "white"};
-  // Last know position of the orbiting body
-  var previousEarthPosition = null;
-  // Page elements
-  var earthElement, sunElement;
-  // Others
-  var currentSunsSize = sunsSize;
-  var middleX = 1;
-  var middleY = 1;
-
-  // Creates the orbiting body
-  function drawTheEarth(earthPosition) {
-    var left = (earthPosition.x - earthSize/2) + "px";
-    var top = (earthPosition.y - earthSize/2) + "px";
-    earthElement.style.left = left;
-    earthElement.style.top = top;
-  }
-
-  // Works out where the body should be placed
-  function calculateEarthPosition(distance, angle) {
-    middleX = Math.floor(canvas.width / 2);
-    middleY = Math.floor(canvas.height / 2);
-    var centerX = (Math.cos(angle) * distance + middleX);
-    var centerY = (Math.sin(-angle) * distance + middleY);
-
-    return {
-      x: centerX,
-      y: centerY
-    };
-  }
-
-  // Creates the orbit lining
-  function drawOrbitalLine(newEarthPosition) {
-    if (previousEarthPosition === null) {
-      previousEarthPosition = newEarthPosition;
-      return;
-    }
-
-    // Thin orbit
-    context.beginPath();
-    context.strokeStyle = colors.orbitalPath;
-    context.moveTo(previousEarthPosition.x, previousEarthPosition.y);
-    context.lineTo(newEarthPosition.x, newEarthPosition.y);
-    context.stroke();
-
-    // Thick orbit
-    //context.beginPath();
-    //context.fillStyle = colors.orbitalPath;
-    //context.moveTo(previousEarthPosition.x, previousEarthPosition.y);
-    //context.arc(newEarthPosition.x, newEarthPosition.y, 2, 0, Math.PI*2, true);
-    //context.fill();
-
-    previousEarthPosition = newEarthPosition;
-  }
-
-  // Draws the scene
-  function drawScene(distance, angle) {
-    var earthPosition = calculateEarthPosition(distance, angle);
-    drawTheEarth(earthPosition);
-    drawOrbitalLine(earthPosition);
-  }
-
-  // Resize canvas to fit the container
-  function fitToContainer(){
-    canvas.style.width='100%';
-    canvas.style.height= canvasHeight + 'px';
-    canvas.width  = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-  }
-
-  // Create the main canvas for drawing
-  function init(success) {
-    // Find the canvas HTML element
-    canvas = document.querySelector(".orbitSimulationCanvas");
-    // Check if the browser supports canvas drawing
-    if (!(window.requestAnimationFrame && canvas && canvas.getContext)) {
-      return;
-    }
-    // Get canvas context for drawing
-    context = canvas.getContext("2d");
-    // Another check for browser support
-    if (!context) {
-      return;
-    }
-    // Update the size of the canvas
-    fitToContainer();
-    // Finds the bodies element
-    earthElement = document.querySelector(".earth");
-    sunElement = document.querySelector(".sun");
-    // Execute success callback function
-    success();
-  }
-
-  // Wipes the current canvas
-  function clearScene() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    previousEarthPosition = null;
-  }
-
-  return {
-    fitToContainer: fitToContainer,
-    drawScene: drawScene,
-    clearScene: clearScene,
-    init: init
-  };
-})();
-
-// Simulation start point
-var simulation = (function() {
-  // The calls 60 times per second
-  function animate() {
-    physics.updatePosition();
-    graphics.drawScene(physics.scaledDistance(), physics.state.angle.value);
-    window.requestAnimationFrame(animate);
-  }
-
-  function start() {
-    graphics.init(function() {
-      // Use the initial conditions for the simulation
-      physics.resetStateToInitialConditions();
-      // Redraw the scene if page is resized
-      window.addEventListener('resize', function(event){
-        graphics.fitToContainer();
-        graphics.clearScene();
-        graphics.drawScene(physics.scaledDistance(), physics.state.angle.value);
-      });
-      // Makes the canvas a simulation
-      animate();
-    });
-  }
-
-  return {
-    start: start
-  };
-})();
-
-simulation.start();
+// Initialise speed slider
+slideBar('slideBarSpeedSetting', function(value) {
+    document.getElementById('sliderValue').innerHTML = value + '%';
+    sliderValue = value;
+});

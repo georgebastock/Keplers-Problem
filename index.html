@@ -15,22 +15,41 @@
   <body>
     <!-- Header -->
     <header></header>
-    <!-- Main content -->
+    <!-- Main Content -->
     <main>
+      <!-- Simulation Container -->
       <div class="orbitSimulationContainer">
+        <!-- Simulation Canvas -->
         <div class="earth">earth</div>
         <div class="sun">sun</div>
         <canvas class="orbitSimulationCanvas"></canvas>
       </div>
+      <!-- Menu -->
       <div class="orbitSimulationUserInput">
         <h1>The Kepler Problem</h1>
         <h2>Welcome to the Kepler problem, you can experiment with the first and second keplers law by inputting values that will effect the current system being displayed</h2>
+        <!-- Speed Setting -->
+        <div class="speedSetting">
+          <div>Speed:<span class="sliderValue" id="sliderValue"></span></div>
+          <div class="slideBar" id="slideBarSpeedSetting">
+            <span></span>
+          </div>
+          <div class="speedButtons">
+            <div class="speedButton pause" id="pause">Pause</div>
+            <div class="speedButton play" id="play">Play</div>
+          </div>
+          <div class="tickList">
+            <label for="orbitLine"><input type="checkbox" id="orbitLine" name="orbitLine"checked>Show orbit Line</label>
+          </div>
+        </div>
       </div>
     </main>
     <!-- Footer -->
     <footer></footer>
     <!-- Scripts  -->
     <script src="js\main.js"></script>
+    <script src="js\firstlaw.js"></script>
+    <script src="js\secondlaw.js"></script>
     <script src="http://localhost:35729/livereload.js"></script>
   </body>
 </html>

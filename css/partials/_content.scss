@@ -21,6 +21,10 @@ html {
   background-size: cover;
   background-repeat: no-repeat;
   font-family: 'Montserrat', sans-serif;
+  color: white;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
 
   body {
     margin: 0;
@@ -30,10 +34,45 @@ html {
       flex-direction: row;
       align-items: center;
       height: 100vh;
+
+      .bold {
+        font-weight: bold;
+      }
     }
   }
 }
 
+// -- Simulation -- //
+
+.orbitSimulationContainer {
+  width: 100%;
+  height: 80%;
+  //margin-left: 150px;
+  position: relative;
+  border-radius: 25px;
+
+  .earth {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    border-radius: 50%;
+  }
+
+  .sun {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    left: 50%;
+    margin-left: -30px;
+    margin-top: -30px;
+    background-color: orange;
+    border-radius: 50%;
+  }
+}
+
+// -- UI -- //
 .orbitSimulationUserInput {
   background-color: rgba(0, 0, 0, 0.5);
   border: 1px white solid;
@@ -46,7 +85,6 @@ html {
   padding: 20px 15px;
 
   h1 {
-    color: white;
     text-align: center;
     font-size: 24px;
     font-family: 'Press Start 2P', cursive;
@@ -55,39 +93,65 @@ html {
   }
 
   h2 {
-    color: white;
     font-size: 14px;
     line-height: 24px;
     letter-spacing: 0.5px;
   }
-}
 
-.orbitSimulationContainer {
-  width: 100%;
-  height: 80%;
-  //margin-left: 150px;
-  position: relative;
-  border-radius: 25px;
-}
+  .speedSetting {
+    .slideBar {
+      width: 250px;
+      height: 20px;
+      margin: 15px auto;
+      position: relative;
+      cursor: e-resize;
+    }
 
-.earth {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: green;
-  border-radius: 50%;
-  color: white;
-}
+    .slideBar:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 9px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: white;
+    }
 
-.sun {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  top: 50%;
-  left: 50%;
-  margin-left: -30px;
-  margin-top: -30px;
-  background-color: orange;
-  border-radius: 50%;
-  color: white;
+    .slideBar span {
+      display: block;
+      height: inherit;
+      position: relative;
+      z-index: 2;
+      background-color: white;
+      border: 1px solid black;
+      cursor: inherit;
+    }
+
+    .sliderValue {
+      margin: 0 5px;
+    }
+
+    .speedButtons {
+      text-align: center;
+
+      .speedButton {
+        font-weight: bold;
+        background-color: black;
+        color: white;
+        padding: 6px 0;
+        width: 130px;
+        margin: 10px;
+        border: solid white 2px;
+        display: inline-block;
+        cursor: pointer;
+        transition: background-color 1s;
+
+        &:hover, &.active {
+          background-color: white;
+          color: black;
+        }
+      }
+    }
+  }
 }
