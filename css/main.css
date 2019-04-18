@@ -34,6 +34,17 @@ html body main .bold {
   height: 80%;
   position: relative;
   border-radius: 25px;
+  /*  .sun {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    left: 50%;
+    margin-left: -30px;
+    margin-top: -30px;
+    background-color: orange;
+    border-radius: 50%;
+  }*/
 }
 
 .orbitSimulationContainer .earth {
@@ -45,6 +56,10 @@ html body main .bold {
 }
 
 .orbitSimulationContainer .sun {
+  background-image: url("../img/sun-texture-3.jpg");
+  background-size: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 30px 15px #fbe602, 0 0 50px 30px #e70f14, 0 0 70px 45px #fabc14;
   position: absolute;
   width: 60px;
   height: 60px;
@@ -52,8 +67,6 @@ html body main .bold {
   left: 50%;
   margin-left: -30px;
   margin-top: -30px;
-  background-color: orange;
-  border-radius: 50%;
 }
 
 .orbitSimulationUserInput {
@@ -115,24 +128,36 @@ html body main .bold {
   margin: 0 5px;
 }
 
-.orbitSimulationUserInput .speedSetting .speedButtons {
+.orbitSimulationUserInput .speedSetting .choiceButtons {
   text-align: center;
 }
 
-.orbitSimulationUserInput .speedSetting .speedButtons .speedButton {
-  font-weight: bold;
+.orbitSimulationUserInput .speedSetting .choiceButtons label, .orbitSimulationUserInput .speedSetting .choiceButtons input {
+  display: inline-block;
+}
+
+.orbitSimulationUserInput .speedSetting .choiceButtons input[type="radio"] {
+  display: none;
+}
+
+.orbitSimulationUserInput .speedSetting .choiceButtons input[type="radio"]:checked + label {
+  background-color: white;
+  color: black;
+}
+
+.orbitSimulationUserInput .speedSetting .choiceButtons label {
   background-color: black;
   color: white;
+  border: solid white 2px;
+  font-weight: bold;
   padding: 6px 0;
   width: 130px;
   margin: 10px;
-  border: solid white 2px;
-  display: inline-block;
   cursor: pointer;
   transition: background-color 1s;
 }
 
-.orbitSimulationUserInput .speedSetting .speedButtons .speedButton:hover, .orbitSimulationUserInput .speedSetting .speedButtons .speedButton.active {
+.orbitSimulationUserInput .speedSetting .choiceButtons label:hover {
   background-color: white;
   color: black;
 }

@@ -20,8 +20,8 @@
       <!-- Simulation Container -->
       <div class="orbitSimulationContainer">
         <!-- Simulation Canvas -->
-        <div class="earth">earth</div>
-        <div class="sun">sun</div>
+        <div class="earth"></div>
+        <div class="sun"></div>
         <canvas class="orbitSimulationCanvas"></canvas>
       </div>
       <!-- Menu -->
@@ -34,12 +34,16 @@
           <div class="slideBar" id="slideBarSpeedSetting">
             <span></span>
           </div>
-          <div class="speedButtons">
-            <div class="speedButton pause" id="pause">Pause</div>
-            <div class="speedButton play" id="play">Play</div>
-          </div>
-          <div class="tickList">
-            <label for="orbitLine"><input type="checkbox" id="orbitLine" name="orbitLine"checked>Show orbit Line</label>
+          <div id="choiceButtons" class="choiceButtons">
+            <input type="radio" id="pause" name="simTime"/>
+            <label for="pause">Pause</label>
+            <input type="radio" id="play" name="simTime" checked/>
+            <label for="play">Play</label>
+            <br />
+            <input type="radio" id="hideOrbit" name="orbitLine" checked/>
+            <label for="hideOrbit">Hide Orbit</label>
+            <input type="radio" id="showOrbit" name="orbitLine"/>
+            <label for="showOrbit">Show Orbit</label>
           </div>
         </div>
       </div>

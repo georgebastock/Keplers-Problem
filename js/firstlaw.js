@@ -92,7 +92,7 @@ var physics = (function() {
   // Main function that calls on every animation frame. It calculates and updates the current positions of the bodies
   function updatePosition() {
     // Dont update if paused
-    if (physics.state.paused) {
+    if (document.getElementById('pause').checked) {
       return;
     }
     // Calculates the position of each body so many times a frame
@@ -199,10 +199,10 @@ var graphics = (function() {
   function drawScene(distance, angle) {
     var earthPosition = calculateEarthPosition(distance, angle);
     drawTheEarth(earthPosition);
-    if (checkBoxOrbitLine.checked == true) {
-      drawOrbitalLine(earthPosition);
-    } else {
+    if (document.getElementById('hideOrbit').checked) {
       context.clearRect(0, 0, canvas.width, canvas.height);
+    } else if (document.getElementById('showOrbit').checked) {
+      drawOrbitalLine(earthPosition);
     }
   }
 
@@ -279,37 +279,6 @@ var simulation = (function() {
     start: start
   };
 })();
-
-// User input scripts
-
-var buttons = document.getElementsByClassName("speedButton");
-var pauseButton = document.getElementById("pause");
-var playButton = document.getElementById("play");
-var amountOfButtons = buttons.length;
-
-// Function to clear all active classes
-function activeClear() {
-  for (var i = 0; i < amountOfButtons; i++) {
-    buttons[i].classList.remove("active");
-    buttons[i].style.cursor = "pointer";
-  }
-}
-
-// Checks for user input on the pause button
-pauseButton.addEventListener('click', function(event) {
-  activeClear();
-  physics.state.paused = true;
-  this.classList.add("active");
-  this.style.cursor = "default";
-});
-
-// Checks for user input on the play button
-playButton.addEventListener('click', function(event) {
-  activeClear();
-  physics.state.paused = false;
-  this.classList.add("active");
-  this.style.cursor = "default";
-});
 
 // Starts simulation
 simulation.start();
