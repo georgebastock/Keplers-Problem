@@ -20,7 +20,7 @@ var physics = (function() {
   };
 
   // The length of one AU (Earth-Sun distance) in pixels.
-  var pixelsInOneEarthSunDistancePerPixel = 250;
+  var pixelsInOneEarthSunDistancePerPixel = 350;
   // A factor that scales the distance between the earth and sun
   var scaleFactor = (constants.earthSunDistanceMeters / pixelsInOneEarthSunDistancePerPixel);
   // The number of orbit calculations done per frame. Higher numbers give more precise calculations but slow the simulation.
@@ -29,6 +29,11 @@ var physics = (function() {
   var deltaT = (3600 * 24 / numberOfCalculationsPerFrame);
   // Speed slider value element
   var speedValue = document.getElementById("sliderValue");
+  // Page elements
+  var earthElement = document.querySelector(".earth");
+  var sunElement = document.querySelector(".sun");
+  var sunSpinSpeed, earthSpinSpeed;
+  var slide = document.getElementById("slideBarSpeedSetting");
 
   // Initial condition of the model
   var initialConditions = {
@@ -91,9 +96,27 @@ var physics = (function() {
 
   // Main function that calls on every animation frame. It calculates and updates the current positions of the bodies
   function updatePosition() {
+
     // Dont update if paused
     if (document.getElementById('pause').checked) {
+      sunElement.style.animationPlayState = "paused";
+      earthElement.style.animationPlayState = "paused";
       return;
+    } else {
+      if (sliderValue <= 50) {
+        sunSpinSpeed = 20 * (50 / sliderValue);
+        earthSpinSpeed = 1 * (50 / sliderValue);
+      } else {
+        sunSpinSpeed = 20 * (25 / sliderValue);
+        earthSpinSpeed = 1 * (25 / sliderValue);
+      }
+      // Checks for user input on the slider
+      if () {
+        sunElement.style.animation = "none";
+      } else {
+        sunElement.style.animation = "sunSpin " + sunSpinSpeed + "s linear infinite";
+      }
+      earthElement.style.animation = "earthSpin " + earthSpinSpeed + "s linear infinite";
     }
     // Calculates the position of each body so many times a frame
     for (var i = 0; i < numberOfCalculationsPerFrame; i++) {
@@ -148,8 +171,6 @@ var graphics = (function() {
   var colors = { orbitalPath: "white"};
   // Last know position of the orbiting body
   var previousEarthPosition = null;
-  // Page elements
-  var earthElement, sunElement;
   // Orbit line checkbox element
   var checkBoxOrbitLine = document.getElementById("orbitLine");
   // Others

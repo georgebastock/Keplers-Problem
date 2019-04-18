@@ -16,7 +16,7 @@ h1 {}
 }
 
 html {
-  background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5) ), url('../img/space-background-9.jpg');
+  background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5) ), url('../img/space-background-8.jpg');
   height: 100%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -47,30 +47,49 @@ html {
 .orbitSimulationContainer {
   width: 100%;
   height: 80%;
-  //margin-left: 150px;
   position: relative;
   border-radius: 25px;
 
   .earth {
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 35px;
+    height: 35px;
     background-color: green;
     border-radius: 50%;
+    background-image: url("../img/earth-texture.jpg");
+    background-size: 90px;
+    box-shadow: 0 0 30px -8px white;
   }
 
   .sun {
-    background-image: url("../img/sun-texture-3.jpg");
-    background-size: cover;
+    background-image: url("../img/sun-texture.jpg");
     border-radius: 50%;
     box-shadow: 0 0 30px 15px #fbe602, 0 0 50px 30px #e70f14, 0 0 70px 45px #fabc14;
     position: absolute;
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
     top: 50%;
     left: 50%;
-    margin-left: -30px;
-    margin-top: -30px;
+    margin-left: -50px;
+    margin-top: -50px;
+    background-size: 260px;
+    background-position: center;
+  }
+
+  @keyframes earthSpin {
+    0% {
+      background-position-x: 0;
+    } 100% {
+      background-position-x: 90px;
+    }
+  }
+
+  @keyframes sunSpin {
+    0% {
+      background-position-x: 0;
+    } 100% {
+      background-position-x: 260px;
+    }
   }
 
 /*  .sun {
