@@ -20,8 +20,18 @@
       <!-- Simulation Container -->
       <div class="orbitSimulationContainer">
         <!-- Simulation Canvas -->
-        <div class="earth"></div>
-        <div class="sun"></div>
+        <div class="earth" id="earth">
+          <div class="planetData earthData" id="planetData">
+            <div class="name">Earth</div>
+            <div class="velocity" id="velocity">Velocity: 0</div>
+          </div>
+        </div>
+        <div class="sun" id="sun">
+          <div class="planetData sunData" id="planetData">
+            <div class="name">Sun</div>
+            <div class="mass" id="mass">Mass: 0kg</div>
+          </div>
+        </div>
         <canvas class="orbitSimulationCanvas"></canvas>
       </div>
       <!-- Menu -->
@@ -30,19 +40,32 @@
         <h2>Welcome to the Kepler problem, you can experiment with the first and second keplers law by inputting values that will effect the current system being displayed</h2>
         <!-- Speed Setting -->
         <div class="speedSetting">
-          <div>Speed:<span class="sliderValue" id="sliderValue"></span></div>
+          <div>Speed:<span class="sliderValue" id="sliderValueSimSpeed"></span></div>
           <div class="slideBar" id="slideBarSpeedSetting">
             <span></span>
           </div>
           <div id="choiceButtons" class="choiceButtons">
-            <input type="radio" id="pause" name="simTime"/>
+            <input type="radio" id="pause" name="simTime" checked/>
             <label for="pause">Pause</label>
-            <input type="radio" id="play" name="simTime" checked/>
+            <input type="radio" id="play" name="simTime"/>
             <label for="play">Play</label>
-            <input type="radio" id="hideOrbit" name="orbitLine" checked/>
+            <input type="radio" id="hideOrbit" name="orbitLine"/>
             <label for="hideOrbit">Hide Orbit</label>
-            <input type="radio" id="showOrbit" name="orbitLine"/>
+            <input type="radio" id="showOrbit" name="orbitLine" checked/>
             <label for="showOrbit">Show Orbit</label>
+          </div>
+        </div>
+        <div class="planetSetting">
+          <div>Mass of the Sun Multiplyer: <span class="sliderValue sunsMass" id="sliderValueSunMass">1.00</span></div>
+          <div class="massSlideBar">
+            <div class="sliderStripe"></div>
+            <div class="sliderHead"></div>
+          </div>
+          <div class="choiceButtons">
+            <input type="checkbox" id="earthData">
+            <label for="earthData">Earth data</label>
+            <input type="checkbox" id="sunData">
+            <label for="sunData">Sun Data</label>
           </div>
         </div>
       </div>
@@ -50,9 +73,9 @@
     <!-- Footer -->
     <footer></footer>
     <!-- Scripts  -->
-    <script src="js\main.js"></script>
+    <script src="js\sliders.js"></script>
     <script src="js\firstlaw.js"></script>
-    <script src="js\secondlaw.js"></script>
+    <script src="js\main.js"></script>
     <script src="http://localhost:35729/livereload.js"></script>
   </body>
 </html>

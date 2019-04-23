@@ -1,12 +1,9 @@
 // -------------------------------------------------
-// Description:
+// Description: This file contains all logic for the first law
 // -------------------------------------------------
-
-// Scripts
 
 // Calculates the position of a orbiting planet
 var physics = (function() {
-
   // Values that wont be changed relative to the earth and sun
   var constants = {
     // The gravitational constant [G], is a physical constant involved in the calculation of gravitational effects
@@ -18,7 +15,6 @@ var physics = (function() {
     // The mass of the sun
     massOfTheSunKg: (1.98855 * Math.pow(10, 30))
   };
-
   // The length of one AU (Earth-Sun distance) in pixels.
   var pixelsInOneEarthSunDistancePerPixel = 350;
   // A factor that scales the distance between the earth and sun
@@ -96,7 +92,6 @@ var physics = (function() {
 
   // Main function that calls on every animation frame. It calculates and updates the current positions of the bodies
   function updatePosition() {
-
     // Dont update if paused
     if (document.getElementById('pause').checked) {
       sunElement.style.animationPlayState = "paused";
@@ -110,14 +105,13 @@ var physics = (function() {
         sunSpinSpeed = 20 * (25 / sliderValue);
         earthSpinSpeed = 1 * (25 / sliderValue);
       }
-      // Checks for user input on the slider
-      if () {
-        sunElement.style.animation = "none";
-      } else {
-        sunElement.style.animation = "sunSpin " + sunSpinSpeed + "s linear infinite";
-      }
+      sunElement.style.animation = "sunSpin " + sunSpinSpeed + "s linear infinite";
       earthElement.style.animation = "earthSpin " + earthSpinSpeed + "s linear infinite";
     }
+
+    document.getElementById("velocity").innerHTML = "Velocity: " + state.distance.speed;
+    document.getElementById("mass").innerHTML = "Mass: " + state.massOfTheSunKg + " kg";
+
     // Calculates the position of each body so many times a frame
     for (var i = 0; i < numberOfCalculationsPerFrame; i++) {
       calculateNewPosition();
@@ -146,11 +140,17 @@ var physics = (function() {
     }
   }
 
+  // Updates the mass of the Sun
+  function updateFromUserInput(solarMassMultiplier) {
+    state.massOfTheSunKg = constants.massOfTheSunKg * solarMassMultiplier;
+  }
+
   return {
     scaledDistance: scaledDistance,
     resetStateToInitialConditions: resetStateToInitialConditions,
     updatePosition: updatePosition,
     initialConditions: initialConditions,
+    updateFromUserInput: updateFromUserInput,
     state: state
   };
 })();
@@ -162,11 +162,11 @@ var graphics = (function() {
   // Canvas context for drawing.
   var context = null
   // Height of the canvas
-  var canvasHeight = 749;
+  var canvasHeight = 937;
   // Size of orbiting planet
   var earthSize = 25;
   // Size of central body
-  var sunsSize = 60;
+  var sunsSize = 100;
   // Color for the orbital path
   var colors = { orbitalPath: "white"};
   // Last know position of the orbiting body
@@ -205,15 +205,23 @@ var graphics = (function() {
       previousEarthPosition = newEarthPosition;
       return;
     }
-
     // Thin orbit
     context.beginPath();
     context.strokeStyle = colors.orbitalPath;
     context.moveTo(previousEarthPosition.x, previousEarthPosition.y);
     context.lineTo(newEarthPosition.x, newEarthPosition.y);
     context.stroke();
-
     previousEarthPosition = newEarthPosition;
+  }
+
+  // Updates the size of the Sun based on its mass. The sunMass argument is a fraction of the real Sun's mass.
+  function updateSunSize(sunMass) {
+    var sunsDefaultWidth = sunsSize;
+    currentSunsSize = sunsDefaultWidth * Math.pow(sunMass, 1/2);
+    sunElement.style.width = currentSunsSize + "px";
+    sunElement.style.height = currentSunsSize + "px";
+    sunElement.style.marginLeft = -(currentSunsSize / 2.0) + "px";
+    sunElement.style.marginTop = -(currentSunsSize / 2.0) + "px";
   }
 
   // Draws the scene
@@ -267,6 +275,7 @@ var graphics = (function() {
   return {
     fitToContainer: fitToContainer,
     drawScene: drawScene,
+    updateSunSize: updateSunSize,
     clearScene: clearScene,
     init: init
   };
@@ -301,5 +310,29 @@ var simulation = (function() {
   };
 })();
 
-// Starts simulation
-simulation.start();
+// Reacts to any user input
+var userInput = (function(){
+  var sunsMassElement = document.querySelector(".sunsMass");
+  var massSlider;
+
+  function updateSunsMass(sliderValue) {
+    var sunsMassValue = sliderValue * 2;
+    if (sunsMassValue > 1) {
+      sunsMassValue = Math.pow(2, sunsMassValue - 1);
+    }
+    var formattedMass = parseFloat(Math.round(sunsMassValue * 100) / 100).toFixed(2);
+    sunsMassElement.innerHTML = formattedMass;
+    physics.updateFromUserInput(sunsMassValue);
+    graphics.updateSunSize(sunsMassValue);
+  }
+
+  function init() {
+    massSlider = Slider(".massSlideBar");
+    massSlider.onSliderChange = updateSunsMass;
+    massSlider.changePosition(0.5);
+  }
+
+  return {
+    init: init
+  };
+})();

@@ -3,7 +3,7 @@
 }
 
 html {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url("../img/space-background-8.jpg");
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url("../img/space-background.jpg");
   height: 100%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -23,6 +23,7 @@ html body main {
   flex-direction: row;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
 }
 
 html body main .bold {
@@ -31,20 +32,8 @@ html body main .bold {
 
 .orbitSimulationContainer {
   width: 100%;
-  height: 80%;
+  height: 100%;
   position: relative;
-  border-radius: 25px;
-  /*  .sun {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    top: 50%;
-    left: 50%;
-    margin-left: -30px;
-    margin-top: -30px;
-    background-color: orange;
-    border-radius: 50%;
-  }*/
 }
 
 .orbitSimulationContainer .earth {
@@ -117,7 +106,34 @@ html body main .bold {
   letter-spacing: 0.5px;
 }
 
-.orbitSimulationUserInput .speedSetting .slideBar {
+.orbitSimulationUserInput .massSlideBar {
+  width: 250px;
+  height: 20px;
+  margin: 15px auto;
+  position: relative;
+  cursor: pointer;
+}
+
+.orbitSimulationUserInput .massSlideBar .sliderStripe {
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  top: 9px;
+  left: 0px;
+  background-color: white;
+}
+
+.orbitSimulationUserInput .massSlideBar .sliderHead {
+  position: absolute;
+  left: 0;
+  width: 10px;
+  height: 20px;
+  background-color: white;
+  border: 1px solid black;
+  cursor: inherit;
+}
+
+.orbitSimulationUserInput .slideBar {
   width: 250px;
   height: 20px;
   margin: 15px auto;
@@ -125,7 +141,7 @@ html body main .bold {
   cursor: e-resize;
 }
 
-.orbitSimulationUserInput .speedSetting .slideBar:before {
+.orbitSimulationUserInput .slideBar:before {
   content: "";
   display: block;
   position: absolute;
@@ -136,7 +152,7 @@ html body main .bold {
   background-color: white;
 }
 
-.orbitSimulationUserInput .speedSetting .slideBar span {
+.orbitSimulationUserInput .slideBar span {
   display: block;
   height: inherit;
   position: relative;
@@ -146,28 +162,41 @@ html body main .bold {
   cursor: inherit;
 }
 
-.orbitSimulationUserInput .speedSetting .sliderValue {
+.orbitSimulationUserInput .sliderValue {
   margin: 0 5px;
 }
 
-.orbitSimulationUserInput .speedSetting .choiceButtons {
+.orbitSimulationUserInput .speedSetting {
+  margin-bottom: 10px;
+}
+
+.orbitSimulationUserInput .choiceButtons {
   text-align: center;
 }
 
-.orbitSimulationUserInput .speedSetting .choiceButtons label, .orbitSimulationUserInput .speedSetting .choiceButtons input {
+.orbitSimulationUserInput .choiceButtons label, .orbitSimulationUserInput .choiceButtons input {
   display: inline-block;
 }
 
-.orbitSimulationUserInput .speedSetting .choiceButtons input[type="radio"] {
+.orbitSimulationUserInput .choiceButtons input[type="radio"] {
   display: none;
 }
 
-.orbitSimulationUserInput .speedSetting .choiceButtons input[type="radio"]:checked + label {
+.orbitSimulationUserInput .choiceButtons input[type="checkbox"] {
+  display: none;
+}
+
+.orbitSimulationUserInput .choiceButtons input[type="checkbox"]:checked + label {
   background-color: white;
   color: black;
 }
 
-.orbitSimulationUserInput .speedSetting .choiceButtons label {
+.orbitSimulationUserInput .choiceButtons input[type="radio"]:checked + label {
+  background-color: white;
+  color: black;
+}
+
+.orbitSimulationUserInput .choiceButtons label {
   background-color: black;
   color: white;
   border: solid white 2px;
@@ -179,7 +208,24 @@ html body main .bold {
   transition: background-color 1s;
 }
 
-.orbitSimulationUserInput .speedSetting .choiceButtons label:hover {
+.orbitSimulationUserInput .choiceButtons label:hover {
   background-color: white;
   color: black;
+}
+
+.planetData {
+  position: relative;
+  top: -55px;
+  left: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px white solid;
+  border-radius: 10px;
+  width: 125px;
+  padding: 5px 10px;
+  display: none;
+}
+
+.planetData.sunData {
+  top: -60px;
+  left: 90px;
 }

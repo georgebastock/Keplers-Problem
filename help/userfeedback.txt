@@ -6,9 +6,9 @@ Damo: moon around earth,
 
 ---------------------------------------------------------------------------------------------------
 
-Sun Mass
+Sun Mass - DONE
 
-clickable planets
+clickable planets - IN PROGRESS
 
 ghost planet
 

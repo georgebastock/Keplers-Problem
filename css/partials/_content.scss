@@ -16,7 +16,7 @@ h1 {}
 }
 
 html {
-  background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5) ), url('../img/space-background-8.jpg');
+  background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5) ), url('../img/space-background.jpg');
   height: 100%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -34,6 +34,7 @@ html {
       flex-direction: row;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
 
       .bold {
         font-weight: bold;
@@ -46,9 +47,8 @@ html {
 
 .orbitSimulationContainer {
   width: 100%;
-  height: 80%;
+  height: 100%;
   position: relative;
-  border-radius: 25px;
 
   .earth {
     position: absolute;
@@ -91,18 +91,6 @@ html {
       background-position-x: 260px;
     }
   }
-
-/*  .sun {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    top: 50%;
-    left: 50%;
-    margin-left: -30px;
-    margin-top: -30px;
-    background-color: orange;
-    border-radius: 50%;
-  }*/
 }
 
 // -- UI -- //
@@ -131,72 +119,127 @@ html {
     letter-spacing: 0.5px;
   }
 
-  .speedSetting {
-    .slideBar {
-      width: 250px;
-      height: 20px;
-      margin: 15px auto;
-      position: relative;
-      cursor: e-resize;
-    }
+  .massSlideBar {
+    width: 250px;
+    height: 20px;
+    margin: 15px auto;
+    position: relative;
+    cursor: pointer;
 
-    .slideBar:before {
-      content: "";
-      display: block;
+    .sliderStripe {
+      height: 2px;
+      width: 100%;
       position: absolute;
       top: 9px;
-      left: 0;
-      width: 100%;
-      height: 2px;
+      left: 0px;
       background-color: white;
     }
 
-    .slideBar span {
-      display: block;
-      height: inherit;
-      position: relative;
-      z-index: 2;
+    .sliderHead {
+      position: absolute;
+      left: 0;
+      width: 10px;
+      height: 20px;
       background-color: white;
       border: 1px solid black;
       cursor: inherit;
     }
+  }
 
-    .sliderValue {
-      margin: 0 5px;
+  .slideBar {
+    width: 250px;
+    height: 20px;
+    margin: 15px auto;
+    position: relative;
+    cursor: e-resize;
+  }
+
+  .slideBar:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: white;
+  }
+
+  .slideBar span {
+    display: block;
+    height: inherit;
+    position: relative;
+    z-index: 2;
+    background-color: white;
+    border: 1px solid black;
+    cursor: inherit;
+  }
+
+  .sliderValue {
+    margin: 0 5px;
+  }
+
+  .speedSetting {
+    margin-bottom: 10px;
+  }
+
+  .choiceButtons {
+    text-align: center;
+
+    label, input {
+      display: inline-block;
     }
 
-    .choiceButtons {
-      text-align: center;
-
-      label, input {
-        display: inline-block;
-      }
-
-      input[type="radio"] {
-        display: none;
-      }
-
-      input[type="radio"]:checked + label {
-        background-color: white;
-        color: black;
-      }
-
-      label {
-        background-color: black;
-        color: white;
-        border: solid white 2px;
-        font-weight: bold;
-        padding: 6px 0;
-        width: 130px;
-        margin: 10px;
-        cursor: pointer;
-        transition: background-color 1s;
-      }
-
-      label:hover {
-        background-color: white;
-        color: black;
-      }
+    input[type="radio"] {
+      display: none;
     }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    input[type="checkbox"]:checked + label {
+      background-color: white;
+      color: black;
+    }
+
+    input[type="radio"]:checked + label {
+      background-color: white;
+      color: black;
+    }
+
+    label {
+      background-color: black;
+      color: white;
+      border: solid white 2px;
+      font-weight: bold;
+      padding: 6px 0;
+      width: 130px;
+      margin: 10px;
+      cursor: pointer;
+      transition: background-color 1s;
+    }
+
+    label:hover {
+      background-color: white;
+      color: black;
+    }
+  }
+}
+
+.planetData {
+  position: relative;
+  top: -55px;
+  left: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px white solid;
+  border-radius: 10px;
+  width: 125px;
+  padding: 5px 10px;
+  display: none;
+
+  &.sunData {
+    top: -60px;
+    left: 90px;
   }
 }
